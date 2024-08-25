@@ -75,3 +75,22 @@ func GetAllTodos() ([]Todo, error) {
 	}
 	return todos, nil
 }
+
+func GetTodoById(id int64) (*Todo, error) {
+	query := "SELECT * FROM todos where id = $1"
+	row := db.DB.QueryRow(query, id)
+	var todo Todo
+	var listJson []byte
+	err := row.Scan(&todo.ID, &todo.Title, &listJson, &todo.IsActive, &todo.CreatedAt, &todo.UpdatedAt, &todo.UserID)
+	if err != nil {
+		fmt.Println("Error in fetching todo", err)
+		return nil, err
+	}
+	// Unmarshal the JSONB field into the List slice
+	err = json.Unmarshal(listJson, &todo.List)
+	if err != nil {
+		fmt.Println("Error while unmarshaling", err)
+		return nil, err
+	}
+	return &todo, nil
+}

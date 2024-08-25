@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"project_todo/models"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,4 +37,18 @@ func createTodo(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusCreated, gin.H{"message": "Todo created", "todo": todo})
+}
+
+func getTodoById(context *gin.Context) {
+	todoId, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todo id"})
+		return
+	}
+	todo, err := models.GetTodoById(todoId)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todo"})
+		return
+	}
+	context.JSON(http.StatusOK, todo)
 }
