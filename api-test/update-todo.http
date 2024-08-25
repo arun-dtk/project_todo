@@ -1,0 +1,11 @@
+PUT http://localhost:8080/todos/1
+content-type: application/json
+
+{
+    "Title": "Test todo name1",
+    "List": [{"item": "sample data", "checked": false}, {"item": "sample data2", "checked": false}],
+    "IsActive": true,
+    "CreatedAt": "2024-01-01T22:04:00.000Z",
+    "UpdatedAt": "2024-01-02T22:04:00.000Z",
+    "UserID": 1
+}

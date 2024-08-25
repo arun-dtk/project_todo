@@ -20,7 +20,7 @@ func getAllTodos(context *gin.Context) {
 
 func createTodo(context *gin.Context) {
 	var todo models.Todo
-	err := context.ShouldBindBodyWithJSON(&todo)
+	err := context.ShouldBindJSON(&todo)
 
 	// Debugging: Print the entire todo struct after binding JSON
 	fmt.Printf("Parsed todo: %+v\n", todo)
@@ -42,7 +42,7 @@ func createTodo(context *gin.Context) {
 func getTodoById(context *gin.Context) {
 	todoId, err := strconv.ParseInt(context.Param("id"), 10, 64)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todo id"})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to parse todo id"})
 		return
 	}
 	todo, err := models.GetTodoById(todoId)
@@ -51,4 +51,32 @@ func getTodoById(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, todo)
+}
+
+func updateTodoById(context *gin.Context) {
+	todoId, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to parse todo id"})
+		return
+	}
+
+	_, err = models.GetTodoById(todoId)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todo to update"})
+		return
+	}
+
+	var modifiedTodo models.Todo
+	err = context.ShouldBindJSON(&modifiedTodo)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse request data"})
+		return
+	}
+	modifiedTodo.ID = todoId
+	err = modifiedTodo.Update()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to update todo"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "Todo updated successfully"})
 }

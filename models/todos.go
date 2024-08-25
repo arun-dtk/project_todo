@@ -94,3 +94,30 @@ func GetTodoById(id int64) (*Todo, error) {
 	}
 	return &todo, nil
 }
+
+func (t Todo) Update() error {
+	query := `
+	UPDATE todos
+	SET title =$1, list=$2, is_active=$3, updated_at=$4
+	WHERE id = $5
+	`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		fmt.Println("error in preparing query")
+		return err
+	}
+	defer stmt.Close()
+	var listJSON []byte
+	listJSON, err = json.Marshal(t.List)
+
+	if err != nil {
+		fmt.Println("error in marshaling json")
+		return err
+	}
+
+	// Convert listJSON to string
+	listJSONString := string(listJSON)
+
+	_, err = stmt.Exec(t.Title, listJSONString, t.IsActive, t.UpdatedAt, t.ID)
+	return err
+}
