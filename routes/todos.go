@@ -80,3 +80,24 @@ func updateTodoById(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, gin.H{"message": "Todo updated successfully"})
 }
+
+func deleteTodoById(context *gin.Context) {
+	todoId, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to parse todo id"})
+		return
+	}
+
+	todo, err := models.GetTodoById(todoId)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch the todo"})
+		return
+	}
+	err = todo.Delete()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to delete the todo"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Todo deleted successfully"})
+}

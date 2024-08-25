@@ -121,3 +121,16 @@ func (t Todo) Update() error {
 	_, err = stmt.Exec(t.Title, listJSONString, t.IsActive, t.UpdatedAt, t.ID)
 	return err
 }
+
+func (t Todo) Delete() error {
+	query := "DELETE FROM todos WHERE id = $1"
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(t.ID)
+	return err
+}
