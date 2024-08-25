@@ -1,0 +1,11 @@
+POST http://localhost:8080/todos
+content-type: application/json
+
+{
+    "Title": "Test todo1",
+    "List": [{"item": "sample data", "checked": false}],
+    "IsActive": true,
+    "CreatedAt": "2024-01-01T22:04:00.000Z",
+    "UpdatedAt": "2024-01-01T22:04:00.000Z",
+    "UserID": 1
+}

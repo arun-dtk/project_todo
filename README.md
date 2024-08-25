@@ -6,6 +6,7 @@ Clone the project code.
 Run `cd project_todo` to move to project folder in terminal.  
 Install all dependencies.  
 Set up a Postgres database and keep the connection url in the env file on your project home directory.
+Use REST Client extension in VS code for testing APIs.
 
 ## Running the project
 Run `go run .` to run the project and access it via browser on localhost:8080
