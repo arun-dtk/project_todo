@@ -43,6 +43,25 @@ func InitDB() {
 }
 
 func createTables() {
+
+	createUsersTable := `
+	CREATE TABLE IF NOT EXISTS users (
+		id SERIAL PRIMARY KEY,
+		email TEXT NOT NULL UNIQUE,
+		first_name TEXT NOT NULL,
+		last_name TEXT NOT NULL,
+		password TEXT NOT NULL,
+		is_active BOOLEAN DEFAULT TRUE,
+		created_at TIMESTAMPTZ DEFAULT NOW(),
+		updated_at TIMESTAMPTZ DEFAULT NOW()
+	)
+	`
+	_, err := DB.Exec(createUsersTable)
+	if err != nil {
+		fmt.Println(err)
+		panic("Unable to create users table")
+	}
+
 	createTodosTable := `
 	CREATE TABLE IF NOT EXISTS todos (
 		id SERIAL PRIMARY KEY,
@@ -51,11 +70,13 @@ func createTables() {
 		is_active BOOLEAN DEFAULT TRUE,
 		created_at TIMESTAMPTZ DEFAULT NOW(),
 		updated_at TIMESTAMPTZ DEFAULT NOW(),
-		user_id INTEGER
+		user_id INTEGER,
+		FOREIGN KEY(user_id) REFERENCES users(id)
 	)
 	`
-	_, err := DB.Exec(createTodosTable)
+	_, err = DB.Exec(createTodosTable)
 	if err != nil {
+		fmt.Println(err)
 		panic("Unable to create todos table")
 	}
 }
