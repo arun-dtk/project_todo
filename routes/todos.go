@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"project_todo/models"
 	"strconv"
@@ -10,7 +9,8 @@ import (
 )
 
 func getAllTodos(context *gin.Context) {
-	todos, err := models.GetAllTodos()
+	userId := context.GetInt64("userId")
+	todos, err := models.GetAllTodos(userId)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todos"})
 		return
@@ -22,14 +22,11 @@ func createTodo(context *gin.Context) {
 	var todo models.Todo
 	err := context.ShouldBindJSON(&todo)
 
-	// Debugging: Print the entire todo struct after binding JSON
-	fmt.Printf("Parsed todo: %+v\n", todo)
-
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse request data"})
 		return
 	}
-	fmt.Println("Parsed success", todo)
+	todo.UserID = context.GetInt64("userId")
 
 	err = todo.Save()
 	if err != nil {
@@ -45,9 +42,14 @@ func getTodoById(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to parse todo id"})
 		return
 	}
+	userId := context.GetInt64("userId")
 	todo, err := models.GetTodoById(todoId)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todo"})
+		return
+	}
+	if todo.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized access"})
 		return
 	}
 	context.JSON(http.StatusOK, todo)
@@ -60,9 +62,14 @@ func updateTodoById(context *gin.Context) {
 		return
 	}
 
-	_, err = models.GetTodoById(todoId)
+	userId := context.GetInt64("userId")
+	todo, err := models.GetTodoById(todoId)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch todo to update"})
+		return
+	}
+	if todo.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized update"})
 		return
 	}
 
@@ -87,10 +94,14 @@ func deleteTodoById(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to parse todo id"})
 		return
 	}
-
+	userId := context.GetInt64("userId")
 	todo, err := models.GetTodoById(todoId)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to fetch the todo"})
+		return
+	}
+	if todo.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized delete"})
 		return
 	}
 	err = todo.Delete()

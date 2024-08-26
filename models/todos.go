@@ -23,8 +23,6 @@ type Todo struct {
 }
 
 func (t *Todo) Save() error {
-	// Debugging: Print the content of t.List before marshalling
-	fmt.Printf("Content of t.List: %+v\n", t.List)
 
 	listJSON, err := json.Marshal(t.List)
 	fmt.Println("listJSON", listJSON)
@@ -33,7 +31,6 @@ func (t *Todo) Save() error {
 	}
 	// Convert listJSON to string
 	listJSONString := string(listJSON)
-	fmt.Println("listJSONString", listJSONString)
 
 	query := `
 	INSERT INTO todos(title, list, is_active, created_at, updated_at, user_id)
@@ -50,9 +47,9 @@ func (t *Todo) Save() error {
 	return err
 }
 
-func GetAllTodos() ([]Todo, error) {
-	query := "SELECT * FROM todos"
-	rows, err := db.DB.Query(query)
+func GetAllTodos(userId int64) ([]Todo, error) {
+	query := "SELECT * FROM todos WHERE user_id = $1"
+	rows, err := db.DB.Query(query, userId)
 	if err != nil {
 		return nil, err
 	}

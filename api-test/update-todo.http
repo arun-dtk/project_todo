@@ -1,5 +1,6 @@
-PUT http://localhost:8080/todos/1
+PUT http://localhost:8080/todos/3
 content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2UyQGdtYWlsLmNvbSIsImV4cCI6MTcyNDY3NTU5OCwidXNlcklkIjoxMX0.hYHQw-Gooceaxdd5GJt8K0ehRjcdKXwC-5p5v2ei0Jk
 
 {
     "Title": "Test todo name1",
@@ -7,5 +8,5 @@ content-type: application/json
     "IsActive": true,
     "CreatedAt": "2024-01-01T22:04:00.000Z",
     "UpdatedAt": "2024-01-02T22:04:00.000Z",
-    "UserID": 1
+    "UserID": 3
 }
