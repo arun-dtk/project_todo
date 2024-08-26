@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"project_todo/db"
 	"project_todo/utils"
@@ -10,7 +11,7 @@ import (
 type User struct {
 	ID        int64     `db:"id" json:"id"`
 	Email     string    `binding:"required" db:"email" json:"email"`
-	FirstName string    `binding:"required" db:"first_name" json:"firstName"`
+	FirstName string    `db:"first_name" json:"firstName"`
 	LastName  string    `db:"last_name" json:"lastName"`
 	Password  string    `binding:"required" db:"password" json:"password"`
 	IsActive  bool      `db:"is_active" json:"isActive"`
@@ -37,4 +38,20 @@ func (u *User) Save() error {
 	// Scan should has a destination pointer
 	fmt.Println(err)
 	return err
+}
+
+func (u User) ValidateCredentials() error {
+	query := "SELECT id, password from users where email = $1"
+	row := db.DB.QueryRow(query, u.Email)
+	var existingPassword string
+	err := row.Scan(&u.ID, &existingPassword)
+	if err != nil {
+		return errors.New("Invalid Credentials")
+	}
+
+	isValid := utils.ComparePassword(u.Password, existingPassword)
+	if !isValid {
+		return errors.New("Invalid Credentials")
+	}
+	return nil
 }

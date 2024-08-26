@@ -9,4 +9,5 @@ func RegisterRoutes(server *gin.Engine) {
 	server.PUT("/todos/:id", updateTodoById)
 	server.DELETE("/todos/:id", deleteTodoById)
 	server.POST("/signup", signup)
+	server.POST("/login", login)
 }
