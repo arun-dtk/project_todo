@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-display">
+                <h1 style="display: inline; margin-right:50px; color:azure">Todo checklist application</h1>
+                <button onclick="window.location.href='/app-signup'">Signup</button>
+                <button onclick="window.location.href='/app-login'">Login</button>
+            </div>
+        </div>
+    </header>
+    <h2 style="display: flex;justify-content: center;">Signup</h2>
+    <form id="signupForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="text" id="firstname" placeholder="First Name" required>
+        <input type="text" id="lastname" placeholder="Last Name" required>
+        <button type="submit">Signup</button>
+    </form>
+    <p id="message"></p>
+    <script type="text/javascript" src="/static/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0px;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.header-container {
+    width: 100%;
+    height: 70px;
+    background-color: crimson;
+}
+
+.header-display{
+    display:flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    margin: 4px 2px;
+    border-radius: 12px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: auto;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li.todo-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo-header span {
+    font-weight: bold;
+}
+
+.todo-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+input {
+    height: 30px;
+    border-radius: 9px;
+}
+
+input[type="text"] {
+    flex-grow: 1;
+}
+
+textarea {
+    width: 100%;
+    height: 50px;
+    resize: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 14px;
+}

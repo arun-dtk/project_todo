@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-display">
+                <h1 style="display: inline; margin-right:50px; color:azure">Todo checklist application</h1>
+                <button id="addTodoBtn">Add Todo</button>
+                <button id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </header>
+    <ul id="todosList"></ul>
+
+    <!-- Hidden form template for creating new todos -->
+    <div id="todoFormTemplate" style="display: none;">
+        <input type="text" id="todoTitle" placeholder="Todo Title">
+        <ul id="checklistItems"></ul>
+        <textarea id="newChecklistItem" placeholder="Enter checklist item and press Enter"></textarea>
+        <button id="saveTodoBtn">Save</button>
+        <button id="backBtn">Back</button>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
