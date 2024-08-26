@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"project_todo/models"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,6 +28,9 @@ func createTodo(context *gin.Context) {
 		return
 	}
 	todo.UserID = context.GetInt64("userId")
+	todo.CreatedAt = time.Now()
+	todo.UpdatedAt = time.Now()
+	todo.IsActive = true
 
 	err = todo.Save()
 	if err != nil {
@@ -80,6 +84,7 @@ func updateTodoById(context *gin.Context) {
 		return
 	}
 	modifiedTodo.ID = todoId
+	modifiedTodo.UpdatedAt = time.Now()
 	err = modifiedTodo.Update()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Unable to update todo"})

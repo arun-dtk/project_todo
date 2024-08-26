@@ -24,6 +24,7 @@ func createConnectionString() string {
 func InitDB() {
 
 	connectionString := createConnectionString()
+	fmt.Println(connectionString)
 	var err error //required. since := in the next line cause error in creating DB tables.
 	DB, err = sql.Open("postgres", connectionString)
 	fmt.Println("Connecting to database", connectionString)
