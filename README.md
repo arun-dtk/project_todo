@@ -11,7 +11,16 @@ Use REST Client extension in VS code for testing APIs.
 ## Running the project
 Run `go run .` to run the project and access it via browser on localhost:8080
 
-
 ## Project creation steps
 1. `go mod init project_todo` This will create go.mod file.
 2. `go get -u github.com/gin-gonic/gin` This will add gin framework dependency to the project.
+
+## env file items expected. Please fill in proper details to run the project
+
+DB_HOST=""
+DB_PORT=5432
+DB_USER=""
+DB_PASSWORD=""
+DB_NAME=""
+JWT_SECRET=""
+
