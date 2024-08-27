@@ -18,9 +18,14 @@ Run `go run .` to run the project and access it via browser on localhost:8080
 ## env file items expected. Please fill in proper details to run the project
 
 DB_HOST=""
+
 DB_PORT=5432
+
 DB_USER=""
+
 DB_PASSWORD=""
+
 DB_NAME=""
+
 JWT_SECRET=""
 
