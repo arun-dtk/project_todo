@@ -1,4 +1,4 @@
-# Todo application backend #
+# Todo application #
 This is an application for CRUD operations on todo items. This is built using Golang and Gin framework.
 
 ## Project Setup / Installation
