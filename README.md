@@ -9,7 +9,10 @@ Set up a Postgres database and keep the connection url in the env file on your p
 Use REST Client extension in VS code for testing APIs.
 
 ## Running the project
-Run `go run .` to run the project and access it via browser on localhost:8080
+Run `go run .` to run the project and access it via browser on `localhost:8080`
+
+## Running the API benchmark
+Open a new terminal and go to benchmark folder using `cd benchmark` & run using `go run benchmark.go` 
 
 ## Project creation steps
 1. `go mod init project_todo` This will create go.mod file.
