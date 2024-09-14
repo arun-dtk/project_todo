@@ -374,6 +374,64 @@ func TestDeleteTodoById_Failure(t *testing.T) {
 	assert.JSONEq(t, expectedResponse, w.Body.String())
 }
 
+func TestDeleteTodoById_GetFailure(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	// Mock Todo data
+	mockTodo := &models.Todo{
+		ID:     1,
+		UserID: 10,
+	}
+
+	// Patch models.GetTodoById to return an error
+	monkey.Patch(models.GetTodoById, func(todoId int64) (*models.Todo, error) {
+		return nil, errors.New("Unable to fetch the todo")
+	})
+	defer monkey.Unpatch(models.GetTodoById)
+
+	// Set the userId in the context
+	c.Set("userId", int64(10))
+
+	// Simulate the request
+	c.Params = gin.Params{{Key: "id", Value: strconv.FormatInt(mockTodo.ID, 10)}}
+	c.Request = httptest.NewRequest("DELETE", "/todos/1", nil)
+
+	// Call the handler function
+	deleteTodoById(c)
+
+	// Assert that the response status code is 500 Internal Server Error
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+
+	// Assert the response body
+	expectedResponse := `{"message":"Unable to fetch the todo"}`
+	assert.JSONEq(t, expectedResponse, w.Body.String())
+}
+
+func TestDeleteTodoById_ParamError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	// Set the userId in the context
+	c.Set("userId", int64(10))
+
+	// Simulate the request
+	c.Params = gin.Params{{Key: "id", Value: "abc"}}
+	c.Request = httptest.NewRequest("DELETE", "/todos/abc", nil)
+
+	// Call the handler function
+	deleteTodoById(c)
+
+	// Assert that the response status code is 500 Internal Server Error
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+
+	// Assert the response body
+	expectedResponse := `{"message":"Unable to parse todo id"}`
+	assert.JSONEq(t, expectedResponse, w.Body.String())
+}
+
 func TestGetTodoById_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	w := httptest.NewRecorder()

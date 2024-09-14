@@ -100,12 +100,15 @@ func invokeApi(endpoint EndPoint, resultChan chan BenchmarkResult) {
 	jsonBody, err := json.Marshal(endpoint.Body)
 	if err != nil {
 		resultChan <- BenchmarkResult{Endpoint: endpoint.EndPoint, Method: endpoint.Method, StatusCode: 500, Duration: 0, Error: err}
+		return // Exit early if there's an error
 	}
 
 	// Create the request
 	req, err := http.NewRequest(endpoint.Method, endpoint.EndPoint, bytes.NewBuffer(jsonBody))
+
 	if err != nil {
 		resultChan <- BenchmarkResult{Endpoint: endpoint.EndPoint, Method: endpoint.Method, StatusCode: 500, Duration: 0, Error: err}
+		return // Exit early if there's an error
 	}
 
 	// Set content type and authorization headers if necessary
@@ -120,8 +123,10 @@ func invokeApi(endpoint EndPoint, resultChan chan BenchmarkResult) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	duration := time.Since(start)
+
 	if err != nil {
-		resultChan <- BenchmarkResult{Endpoint: endpoint.EndPoint, Method: endpoint.Method, StatusCode: resp.StatusCode, Duration: duration, Error: err}
+		resultChan <- BenchmarkResult{Endpoint: endpoint.EndPoint, Method: endpoint.Method, StatusCode: 500, Duration: duration, Error: err}
+		return // Exit early if there's an error
 	}
 	defer resp.Body.Close()
 	// Send the result to the channel
